@@ -6,11 +6,20 @@ struct pessoa {
 	struct pessoa *prox;
 };
 
+struct prato {
+	char cor;
+	struct prato *prox;
+};
+
 typedef struct pessoa Pessoa;
+
+typedef struct prato Prato;
 
 Pessoa *fila;
 
-void add(int senha){
+Prato *pilha;
+
+void addFila(int senha){
 	Pessoa *p = (Pessoa*)malloc(sizeof(Pessoa));
 	p->senha = senha;
 	p->prox = NULL;
@@ -26,7 +35,15 @@ void add(int senha){
 	}
 }
 
-void remover(){
+void addPilha(char cor){
+	Prato *p = (Prato*)malloc(sizeof(Prato));
+	p->cor = cor;	
+	p->prox=pilha;
+	pilha = p;
+	
+}
+
+void removerFila(){
 	if(fila==NULL){
 		printf("A fila está vazia.");
 	} else{
@@ -34,26 +51,56 @@ void remover(){
 	}
 }
 
-void imprime(Pessoa *f){
+void removerPilha(){
+	if(pilha==NULL){
+		printf("A pilha está vazia.");
+	} else{
+		pilha = pilha->prox;
+	}
+}
+
+void imprimeFila(Pessoa *f){
 	if(f!=NULL){
 		printf("Senha da Pessoa: %d \n", f->senha);
-		imprime(f->prox);
+		imprimeFila(f->prox);
+	}
+}
+
+void imprimePilha(Prato *p){
+	if(p!=NULL){
+		printf("Cor do prato: %c \n", p->cor);
+		imprimePilha(p->prox);
 	}
 }
 
 int main() {
-  add(45);
-	add(12);
-	add(123456);
+  	addFila(45);
+	addFila(12);
+	addFila(123456);	
 
-	Pessoa *filaAux = fila;
-	imprime(filaAux);
+	Pessoa *filaAux = fila;	
+	
+	imprimeFila(filaAux);	
 
-	remover();
+	removerFila();
 	filaAux = fila;
-	remover();
+	removerFila();
 	filaAux = fila;
 	printf("\n");
-	imprime(filaAux);
+	imprimeFila(filaAux);
+
+	addPilha('a');
+	addPilha('v');
+	addPilha('m');
+
+	Prato *pilhaAux = pilha;	
+
+	removerPilha();
+
+	pilhaAux = pilha;
+
+	imprimePilha(pilhaAux);
+
+	
   return 0;
 }
